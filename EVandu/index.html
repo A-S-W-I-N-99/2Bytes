@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NoteNest – Smart Notes Organizer</title>
+  <meta name="description" content="A stationery-inspired modern notes organizer for students to capture, categorize, and master their academic ideas.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- App Container -->
+  <div class="app-layout" id="appLayout">
+    <!-- Sidebar Overlay for Mobile -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <!-- Left Sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <!-- Brand Logo -->
+      <div class="sidebar-brand">
+        <div class="brand-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+            <path d="M8 7h8"></path>
+            <path d="M8 11h6"></path>
+            <circle cx="15.5" cy="15.5" r="1.5" fill="currentColor"></circle>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <span class="brand-name">NoteNest</span>
+          <span class="brand-subtitle">SMART NOTES ORGANIZER</span>
+        </div>
+        <button class="sidebar-close-btn" id="sidebarCloseBtn" aria-label="Close sidebar">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Quick Action: Create Note -->
+      <div class="sidebar-action">
+        <button class="btn btn-primary btn-create" id="sidebarCreateBtn">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="12" y1="5" x2="12" y2="19"></line>
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+          </svg>
+          <span>+ Create Note</span>
+        </button>
+      </div>
+
+      <!-- Navigation Section -->
+      <nav class="sidebar-nav">
+        <div class="nav-section-title">LIBRARY</div>
+        <ul class="nav-list">
+          <li class="nav-item">
+            <button class="nav-link active" data-filter-type="view" data-filter-value="all" id="navAllNotes">
+              <span class="nav-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                  <polyline points="14 2 14 8 20 8"></polyline>
+                  <line x1="16" y1="13" x2="8" y2="13"></line>
+                  <line x1="16" y1="17" x2="8" y2="17"></line>
+                  <polyline points="10 9 9 9 8 9"></polyline>
+                </svg>
+              </span>
+              <span class="nav-label">All Notes</span>
+              <span class="nav-badge" id="countAllNotes">0</span>
+            </button>
+          </li>
+          <li class="nav-item">
+            <button class="nav-link" data-filter-type="view" data-filter-value="favorites" id="navFavorites">
+              <span class="nav-icon star-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                </svg>
+              </span>
+              <span class="nav-label">Favorites</span>
+              <span class="nav-badge" id="countFavorites">0</span>
+            </button>
+          </li>
+          <li class="nav-item">
+            <button class="nav-link" data-filter-type="view" data-filter-value="pinned" id="navPinned">
+              <span class="nav-icon pin-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="12" y1="17" x2="12" y2="22"></line>
+                  <path d="M5 17h14v-1.76a2 2 0 0 0-1.11-1.79l-1.78-.89A4 4 0 0 1 14 9V5a2 2 0 0 0-2-2h0a2 2 0 0 0-2 2v4a4 4 0 0 1-2.11 3.56l-1.78.89A2 2 0 0 0 5 15.24V17z"></path>
+                </svg>
+              </span>
+              <span class="nav-label">Pinned</span>
+              <span class="nav-badge" id="countPinned">0</span>
+            </button>
+          </li>
+        </ul>
+
+        <!-- Subjects Navigation -->
+        <div class="nav-section-header">
+          <span class="nav-section-title">SUBJECTS</span>
+          <button class="btn-icon-subtle" id="navFilterClearBtn" title="Clear Subject Filter" style="display:none;">
+            Clear
+          </button>
+        </div>
+        <ul class="nav-list subject-nav-list" id="sidebarSubjectList">
+          <!-- Dynamically populated subjects -->
+        </ul>
+
+        <!-- Popular Tags Navigation -->
+        <div class="nav-section-header tags-header">
+          <span class="nav-section-title">TAGS</span>
+        </div>
+        <div class="sidebar-tags-cloud" id="sidebarTagsList">
+          <!-- Dynamically populated tags -->
+        </div>
+      </nav>
+
+      <!-- Motivational Student Study Card -->
+      <div class="sidebar-footer">
+        <div class="study-card">
+          <div class="study-card-header">
+            <span class="study-badge">💡 Study Spark</span>
+            <button class="btn-refresh-tip" id="refreshTipBtn" title="Get another study tip" aria-label="Refresh study tip">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="23 4 23 10 17 10"></polyline>
+                <polyline points="1 20 1 14 7 14"></polyline>
+                <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+              </svg>
+            </button>
+          </div>
+          <p class="study-quote" id="studyTipText">
+            "Spaced repetition and active recall transform today's notes into lasting mastery."
+          </p>
+          <div class="study-streak">
+            <span class="streak-icon">🌱</span>
+            <span class="streak-text">Exam Sprint: <strong>7-Day Focus Streak</strong></span>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+      <!-- Top Navigation Bar -->
+      <header class="topbar">
+        <div class="topbar-left">
+          <button class="hamburger-btn" id="hamburgerBtn" aria-label="Toggle Navigation">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="3" y1="12" x2="21" y2="12"></line>
+              <line x1="3" y1="6" x2="21" y2="6"></line>
+              <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg>
+          </button>
+          <div class="breadcrumb">
+            <span class="breadcrumb-root">NoteNest</span>
+            <span class="breadcrumb-separator">/</span>
+            <span class="breadcrumb-active" id="breadcrumbActive">All Notes</span>
+          </div>
+        </div>
+
+        <!-- Global Search Bar -->
+        <div class="search-container">
+          <div class="search-input-wrapper">
+            <span class="search-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              </svg>
+            </span>
+            <input 
+              type="text" 
+              class="search-input" 
+              id="searchInput" 
+              placeholder="Search notes, concepts, tags, or subjects..." 
+              autocomplete="off"
+            >
+            <button class="search-clear-btn" id="searchClearBtn" aria-label="Clear search">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+              </svg>
+            </button>
+            <kbd class="search-shortcut" title="Press Ctrl+K or / to search">Ctrl K</kbd>
+          </div>
+        </div>
+
+        <!-- Topbar Right Actions -->
+        <div class="topbar-right">
+          <button class="btn btn-secondary btn-icon-only" id="resetDemoBtn" title="Reset to competition sample notes">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="1 4 1 10 7 10"></polyline>
+              <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
+            </svg>
+            <span class="btn-text-desktop">Demo Data</span>
+          </button>
+
+          <button class="btn btn-primary topbar-new-btn" id="topbarNewBtn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="12" y1="5" x2="12" y2="19"></line>
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+            </svg>
+            <span>+ New Note</span>
+          </button>
+
+          <div class="user-profile" title="Alex Rivera • III CSE B">
+            <div class="avatar">AK</div>
+            <div class="user-meta">
+              <span class="user-name">Aswin Kamalesh</span>
+              <span class="user-role">III CSE B</span>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- Scrollable Dashboard Body -->
+      <div class="dashboard-scrollable">
+        <div class="dashboard-container">
+          <!-- Hero Section -->
+          <section class="dashboard-hero">
+            <div class="hero-content">
+              <div class="hero-badge">
+                <span class="badge-dot"></span>
+                <span>Fall Semester 2026 • Academic Workspace</span>
+              </div>
+              <h1 class="hero-title">TEAM 2BYTES</h1>
+              <p class="hero-subtitle">One calm space for everything you're learning.</p>
+            </div>
+            <div class="hero-date-card">
+              <div class="date-day" id="currentDay">Today</div>
+              <div class="date-formatted" id="currentFullDate">October 2026</div>
+              <div class="date-status">Ready to study</div>
+            </div>
+          </section>
+
+          <!-- Statistics Cards Grid -->
+          <section class="stats-grid">
+            <!-- Stat 1: Total Notes -->
+            <div class="stat-card stat-purple">
+              <div class="stat-icon-wrapper">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                  <polyline points="14 2 14 8 20 8"></polyline>
+                  <line x1="16" y1="13" x2="8" y2="13"></line>
+                  <line x1="16" y1="17" x2="8" y2="17"></line>
+                  <polyline points="10 9 9 9 8 9"></polyline>
+                </svg>
+              </div>
+              <div class="stat-info">
+                <span class="stat-label">Total Notes</span>
+                <span class="stat-value" id="statTotalNotes">0</span>
+                <span class="stat-subtext">Active knowledge base</span>
+              </div>
+            </div>
+
+            <!-- Stat 2: Subjects -->
+            <div class="stat-card stat-yellow">
+              <div class="stat-icon-wrapper">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
+                </svg>
+              </div>
+              <div class="stat-info">
+                <span class="stat-label">Subjects</span>
+                <span class="stat-value" id="statTotalSubjects">0</span>
+                <span class="stat-subtext">Academic disciplines</span>
+              </div>
+            </div>
+
+            <!-- Stat 3: Favorites -->
+            <div class="stat-card stat-lavender">
+              <div class="stat-icon-wrapper">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                </svg>
+              </div>
+              <div class="stat-info">
+                <span class="stat-label">Favorites</span>
+                <span class="stat-value" id="statTotalFavorites">0</span>
+                <span class="stat-subtext">Quick review stars</span>
+              </div>
+            </div>
+
+            <!-- Stat 4: Words Captured -->
+            <div class="stat-card stat-mint">
+              <div class="stat-icon-wrapper">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 20h9"></path>
+                  <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+                </svg>
+              </div>
+              <div class="stat-info">
+                <span class="stat-label">Total Words</span>
+                <span class="stat-value" id="statTotalWords">0</span>
+                <span class="stat-subtext">Synthesized content</span>
+              </div>
+            </div>
+          </section>
+
+          <!-- Filter & Sorting Controls -->
+          <section class="controls-section">
+            <div class="controls-left">
+              <div class="section-title-wrap">
+                <h2 class="section-heading" id="notesSectionHeading">All Notes</h2>
+                <span class="section-count-chip" id="visibleNotesCount">0</span>
+              </div>
+
+              <!-- Filter Pills for Quick Switch -->
+              <div class="filter-pills" id="quickFilterPills">
+                <button class="filter-pill active" data-pill="all">All</button>
+                <button class="filter-pill" data-pill="pinned">Pinned</button>
+                <button class="filter-pill" data-pill="favorites">Favorites</button>
+              </div>
+            </div>
+
+            <div class="controls-right">
+              <!-- Active Tag or Subject Filter Removable Chip -->
+              <div class="active-filter-badge" id="activeFilterBadge" style="display:none;">
+                <span id="activeFilterBadgeText">Filter</span>
+                <button class="active-filter-remove" id="clearActiveFilterBtn" title="Remove filter">✕</button>
+              </div>
+
+              <!-- Subject Dropdown Filter -->
+              <div class="select-wrapper">
+                <select class="control-select" id="subjectFilterSelect" aria-label="Filter by subject">
+                  <option value="all">All Subjects</option>
+                  <!-- Populated by JS -->
+                </select>
+                <span class="select-chevron">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </span>
+              </div>
+
+              <!-- Sort Dropdown -->
+              <div class="select-wrapper">
+                <select class="control-select" id="sortOrderSelect" aria-label="Sort notes">
+                  <option value="updated-desc">Recently Updated</option>
+                  <option value="created-desc">Newest Created</option>
+                  <option value="created-asc">Oldest Created</option>
+                  <option value="title-asc">Alphabetical (A-Z)</option>
+                  <option value="words-desc">Longest (Word Count)</option>
+                </select>
+                <span class="select-chevron">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </span>
+              </div>
+
+              <!-- View Switcher (Grid vs List) -->
+              <div class="view-switch-group">
+                <button class="view-switch-btn active" id="viewGridBtn" title="Grid View" aria-label="Grid View">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="3" width="7" height="7"></rect>
+                    <rect x="14" y="3" width="7" height="7"></rect>
+                    <rect x="14" y="14" width="7" height="7"></rect>
+                    <rect x="3" y="14" width="7" height="7"></rect>
+                  </svg>
+                </button>
+                <button class="view-switch-btn" id="viewListBtn" title="List View" aria-label="List View">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="8" y1="6" x2="21" y2="6"></line>
+                    <line x1="8" y1="12" x2="21" y2="12"></line>
+                    <line x1="8" y1="18" x2="21" y2="18"></line>
+                    <line x1="3" y1="6" x2="3.01" y2="6"></line>
+                    <line x1="3" y1="12" x2="3.01" y2="12"></line>
+                    <line x1="3" y1="18" x2="3.01" y2="18"></line>
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </section>
+
+          <!-- Notes Grid / List Container -->
+          <div class="notes-container grid-view" id="notesContainer">
+            <!-- Dynamically populated note cards -->
+          </div>
+
+          <!-- Empty State (Shown when 0 notes match) -->
+          <div class="empty-state" id="emptyState" style="display:none;">
+            <div class="empty-state-illustration">
+              <svg width="120" height="120" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="25" y="20" width="70" height="85" rx="8" fill="#FFFFFF" stroke="#5B5BD6" stroke-width="2" stroke-dasharray="4 4"/>
+                <rect x="32" y="15" width="70" height="85" rx="8" fill="#FFFFFF" stroke="#E9E7FF" stroke-width="2"/>
+                <rect x="32" y="15" width="70" height="85" rx="8" fill="#F7F7FC"/>
+                <line x1="44" y1="35" x2="88" y2="35" stroke="#5B5BD6" stroke-width="3" stroke-linecap="round"/>
+                <line x1="44" y1="48" x2="80" y2="48" stroke="#E2E4ED" stroke-width="2.5" stroke-linecap="round"/>
+                <line x1="44" y1="60" x2="88" y2="60" stroke="#E2E4ED" stroke-width="2.5" stroke-linecap="round"/>
+                <line x1="44" y1="72" x2="70" y2="72" stroke="#E2E4ED" stroke-width="2.5" stroke-linecap="round"/>
+                <circle cx="88" cy="85" r="16" fill="#FFF1C7" stroke="#D99B00" stroke-width="2"/>
+                <path d="M84 85l3 3 6-6" stroke="#B38600" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <h3 class="empty-state-title" id="emptyStateTitle">No notes found</h3>
+            <p class="empty-state-text" id="emptyStateText">We couldn't find any notes matching your current filter. Try adjusting your query or create a fresh note.</p>
+            <div class="empty-state-actions">
+              <button class="btn btn-secondary" id="emptyClearFiltersBtn">Clear All Filters</button>
+              <button class="btn btn-primary" id="emptyCreateBtn">+ Create Note</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Note Editor Modal -->
+  <div class="modal-backdrop" id="editorModal" role="dialog" aria-modal="true" aria-labelledby="editorModalTitle">
+    <div class="modal-dialog editor-dialog">
+      <div class="modal-header">
+        <div class="modal-title-wrap">
+          <div class="modal-icon-badge">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 20h9"></path>
+              <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+            </svg>
+          </div>
+          <div>
+            <h3 class="modal-title" id="editorModalTitle">Create New Note</h3>
+            <span class="modal-subtitle">Capture lectures, readings, formulas & summaries</span>
+          </div>
+        </div>
+        <button class="modal-close-btn" id="editorCloseBtn" aria-label="Close editor">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+
+      <form class="editor-form" id="noteEditorForm">
+        <input type="hidden" id="editorNoteId" value="">
+
+        <!-- Top Row: Title -->
+        <div class="form-group">
+          <label for="editorTitle" class="form-label">Note Title <span class="required-star">*</span></label>
+          <input 
+            type="text" 
+            id="editorTitle" 
+            class="form-input form-input-title" 
+            placeholder="e.g. CS 301: B-Trees and Database Indexing" 
+            required 
+            maxlength="150"
+          >
+        </div>
+
+        <!-- Second Row: Subject & Quick Subject Input -->
+        <div class="form-row">
+          <div class="form-group flex-1">
+            <label for="editorSubject" class="form-label">Subject / Course <span class="required-star">*</span></label>
+            <div class="select-wrapper">
+              <select id="editorSubject" class="form-select" required>
+                <option value="Computer Science">Computer Science</option>
+                <option value="Mathematics">Mathematics</option>
+                <option value="Physics">Physics</option>
+                <option value="Biology">Biology</option>
+                <option value="Literature">Literature</option>
+                <option value="Economics">Economics</option>
+                <option value="Chemistry">Chemistry</option>
+                <option value="General">General / Other</option>
+              </select>
+              <span class="select-chevron">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+              </span>
+            </div>
+          </div>
+
+          <div class="form-group flex-1">
+            <label for="editorTags" class="form-label">Tags (separated by comma)</label>
+            <input 
+              type="text" 
+              id="editorTags" 
+              class="form-input" 
+              placeholder="e.g. Algorithms, Exams, Midterm"
+            >
+          </div>
+        </div>
+
+        <!-- Markdown Formatting Helpers -->
+        <div class="editor-toolbar">
+          <span class="toolbar-label">Quick Format:</span>
+          <div class="toolbar-buttons">
+            <button type="button" class="tool-btn" data-format="bold" title="Bold text"><strong>B</strong></button>
+            <button type="button" class="tool-btn" data-format="italic" title="Italic text"><em>I</em></button>
+            <button type="button" class="tool-btn" data-format="h2" title="Section Heading">PDF</button>
+            <button type="button" class="tool-btn" data-format="bullet" title="Bullet List">• List</button>
+            <button type="button" class="tool-btn" data-format="quote" title="Quote block">“ Quote</button>
+            <button type="button" class="tool-btn" data-format="code" title="Code snippet">&lt;/&gt;</button>
+          </div>
+        </div>
+
+        <!-- Third Row: Writing Area -->
+        <div class="form-group editor-textarea-group">
+          <label for="editorContent" class="form-label">Note Content <span class="required-star">*</span></label>
+          <div class="textarea-wrapper">
+            <textarea 
+              id="editorContent" 
+              class="form-textarea stationery-textarea" 
+              rows="12" 
+              placeholder="Type your notes here... You can use bullet points, headings (#, ##), bold (**text**), and code blocks." 
+              required
+            ></textarea>
+          </div>
+        </div>
+
+        <!-- Metrics & Toggles Bar -->
+        <div class="editor-meta-bar">
+          <div class="editor-counters">
+            <span class="counter-item"><strong id="editorWordCount">0</strong> words</span>
+            <span class="counter-divider">•</span>
+            <span class="counter-item"><strong id="editorCharCount">0</strong> characters</span>
+            <span class="counter-divider">•</span>
+            <span class="counter-item" id="editorReadTime">1 min read</span>
+          </div>
+
+          <div class="editor-toggles">
+            <label class="toggle-control" title="Pin note to top of list">
+              <input type="checkbox" id="editorIsPinned">
+              <span class="toggle-box"></span>
+              <span class="toggle-text">Pin Note 📌</span>
+            </label>
+
+            <label class="toggle-control" title="Mark note as favorite">
+              <input type="checkbox" id="editorIsFavorite">
+              <span class="toggle-box"></span>
+              <span class="toggle-text">Favorite ⭐</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Modal Actions Footer -->
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" id="editorCancelBtn">Cancel</button>
+          <button type="submit" class="btn btn-primary" id="editorSaveBtn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+              <polyline points="17 21 17 13 7 13 7 21"></polyline>
+              <polyline points="7 3 7 8 15 8"></polyline>
+            </svg>
+            <span id="editorSubmitText">Save Note</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Note Reading View Modal -->
+  <div class="modal-backdrop" id="readerModal" role="dialog" aria-modal="true" aria-labelledby="readerTitle">
+    <div class="modal-dialog reader-dialog">
+      <div class="reader-header">
+        <div class="reader-badges-bar">
+          <span class="subject-badge" id="readerSubjectBadge">Subject</span>
+          <span class="pin-badge" id="readerPinBadge" style="display:none;">📌 Pinned</span>
+          <span class="fav-badge" id="readerFavBadge" style="display:none;">⭐ Favorite</span>
+        </div>
+        <div class="reader-header-actions">
+          <button class="btn-icon" id="readerCopyBtn" title="Copy note text to clipboard">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+            </svg>
+          </button>
+          <button class="btn-icon" id="readerTogglePinBtn" title="Toggle Pin">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="12" y1="17" x2="12" y2="22"></line>
+              <path d="M5 17h14v-1.76a2 2 0 0 0-1.11-1.79l-1.78-.89A4 4 0 0 1 14 9V5a2 2 0 0 0-2-2h0a2 2 0 0 0-2 2v4a4 4 0 0 1-2.11 3.56l-1.78.89A2 2 0 0 0 5 15.24V17z"></path>
+            </svg>
+          </button>
+          <button class="btn-icon" id="readerToggleFavBtn" title="Toggle Favorite">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+            </svg>
+          </button>
+          <button class="modal-close-btn" id="readerCloseBtn" aria-label="Close reader">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="reader-body">
+        <h1 class="reader-title" id="readerTitle">Note Title</h1>
+
+        <div class="reader-meta-row">
+          <div class="reader-meta-item">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+            <span id="readerDateMeta">Updated Oct 9, 2026</span>
+          </div>
+          <div class="reader-meta-item">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path></svg>
+            <span id="readerWordMeta">350 words</span>
+          </div>
+          <div class="reader-meta-item">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M12 6v6l4 2"></path></svg>
+            <span id="readerTimeMeta">2 min read</span>
+          </div>
+        </div>
+
+        <div class="reader-tags-row" id="readerTagsRow">
+          <!-- Tag chips -->
+        </div>
+
+        <hr class="reader-divider">
+
+        <!-- Formatted content with notebook style paper -->
+        <div class="reader-content stationery-content" id="readerContent">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+
+      <div class="reader-footer">
+        <div class="reader-footer-left">
+          <button class="btn btn-danger-ghost" id="readerDeleteBtn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="3 6 5 6 21 6"></polyline>
+              <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+            </svg>
+            <span>Delete Note</span>
+          </button>
+        </div>
+
+        <div class="reader-footer-right">
+          <button class="btn btn-secondary" id="readerCloseFooterBtn">Close</button>
+          <button class="btn btn-primary" id="readerEditBtn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 20h9"></path>
+              <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+            </svg>
+            <span>Edit Note</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Delete Confirmation Modal -->
+  <div class="modal-backdrop" id="deleteConfirmModal" role="dialog" aria-modal="true" aria-labelledby="deleteModalTitle">
+    <div class="modal-dialog delete-dialog">
+      <div class="delete-icon-wrap">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="3 6 5 6 21 6"></polyline>
+          <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+          <line x1="10" y1="11" x2="10" y2="17"></line>
+          <line x1="14" y1="11" x2="14" y2="17"></line>
+        </svg>
+      </div>
+      <h3 class="delete-title" id="deleteModalTitle">Delete this note?</h3>
+      <p class="delete-message">
+        Are you sure you want to permanently delete <strong id="deleteNoteTitlePreview">"Note Title"</strong>? This action cannot be undone.
+      </p>
+      <div class="delete-actions">
+        <button class="btn btn-secondary" id="deleteCancelBtn">Cancel</button>
+        <button class="btn btn-danger" id="deleteConfirmBtn">Yes, Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Floating Toast Notifications Container -->
+  <div class="toast-container" id="toastContainer" aria-live="polite"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>
